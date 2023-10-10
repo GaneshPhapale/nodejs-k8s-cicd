@@ -49,5 +49,5 @@ app.get('/index', (req,response) =>{
     
 });
 
-//port
+//portt
 app.listen(80, console.log("Listening at port 80..."))
