@@ -1,11 +1,15 @@
 pipeline {
   agent any
+  environment {     
+    DOCKERHUB_CREDENTIALS= credentials('DOCKERHUB_CRED')
+    DOCKER_REPO='nodejs-app'
+  }
     stages {
         stage('GIT PULL') {
           steps {
               git branch: "main",
-              credentialsId: '${GITHUB_REPO_CRED}',
-              url: 'git@github.com:GaneshPhapale/nodejs-k8s-cicd.git'
+              credentialsId: 'GITHUB_REPO_CRED',
+              url: 'https://github.com/GaneshPhapale/nodejs-k8s-cicd.git'
           }
       }
       stage('USER CHECK & CODE CHECK') {
@@ -16,10 +20,19 @@ pipeline {
               '''
           }
       }
+      stage('INSTALL DOCKER CLI') {
+          steps {
+          sh '''
+          wget http://get.docker.com/builds/Linux/x86_64/docker-latest.tgz
+          tar -xvzf docker-latest.tgz
+          mv docker/* /usr/bin/
+          '''
+          }
+      }
       stage('BUILD DOCKER IMAGE') {
           steps {
           sh '''
-          docker build -t ${BUILD_NUMBER} .
+          docker build -t ${BUILD_NUMBER}
           '''
           }
       }
@@ -27,21 +40,28 @@ pipeline {
           steps {
           sh '''
           docker tag ${BUILD_NUMBER} ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD_NUMBER}
-          }
-      }
-      stage(LOGIN TO DOCKER REPOSITORY') {
-          steps {
-          sh '''
-          docker login -u ${DOCKER_USERNAME} -p ${DOCKER_TOKEN}
           '''
           }
       }
-      stage(PUSH DOCKER IMAGE') {
+      stage('LOGIN TO DOCKER REPOSITORY') {
           steps {
           sh '''
-          docker push ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD_NUMBER}    
+          echo ${DOCKERHUB_CRED_PSW} | sudo docker login -u ${DOCKERHUB_CRED_USR} --password-stdin
+          echo 'Login Completed'  
+          '''
+          }
+      }
+      stage('PUSH DOCKER IMAGE') {
+          steps {
+          sh '''
+          docker push ${DOCKERHUB_CRED_USR}/${DOCKER_REPO}:${BUILD_NUMBER}    
           '''
           }
       }
    }
+   post{
+    always {  
+      sh 'docker logout'           
+    }      
+  } 
 }
