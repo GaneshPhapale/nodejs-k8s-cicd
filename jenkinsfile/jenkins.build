@@ -19,27 +19,27 @@ pipeline {
       stage('BUILD DOCKER IMAGE') {
           steps {
           sh '''
-          docker build -t ${BUILD} .
+          docker build -t ${BUILD_NUMBER} .
           '''
           }
       }
       stage('TAG DOCKER IMAGE') {
           steps {
           sh '''
-          docker tag ${BUILD} ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD}
+          docker tag ${BUILD_NUMBER} ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD_NUMBER}
           }
       }
       stage(LOGIN TO DOCKER REPOSITORY') {
           steps {
           sh '''
-          docker login -u ${DOCKER_USERNAME} -p${DOCKER_TOKEN}
+          docker login -u ${DOCKER_USERNAME} -p ${DOCKER_TOKEN}
           '''
           }
       }
       stage(PUSH DOCKER IMAGE') {
           steps {
           sh '''
-          docker push ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD}    
+          docker push ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD_NUMBER}    
           '''
           }
       }
