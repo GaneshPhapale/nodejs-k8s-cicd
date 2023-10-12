@@ -1,0 +1,47 @@
+pipeline {
+  agent any
+    stages {
+        stage('GIT PULL') {
+          steps {
+              git branch: "main",
+              credentialsId: '${GITHUB_REPO_CRED}',
+              url: 'git@github.com:GaneshPhapale/nodejs-k8s-cicd.git'
+          }
+      }
+      stage('USER CHECK & CODE CHECK') {
+          steps {
+              sh ''' 
+              whoami
+              ls -lh
+              '''
+          }
+      }
+      stage('BUILD DOCKER IMAGE') {
+          steps {
+          sh '''
+          docker build -t ${BUILD} .
+          '''
+          }
+      }
+      stage('TAG DOCKER IMAGE') {
+          steps {
+          sh '''
+          docker tag ${BUILD} ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD}
+          }
+      }
+      stage(LOGIN TO DOCKER REPOSITORY') {
+          steps {
+          sh '''
+          docker login -u ${DOCKER_USERNAME} -p${DOCKER_TOKEN}
+          '''
+          }
+      }
+      stage(PUSH DOCKER IMAGE') {
+          steps {
+          sh '''
+          docker push ${DOCKER_USERNSME}/${DOCKER_REPO}:${BUILD}    
+          '''
+          }
+      }
+   }
+}
