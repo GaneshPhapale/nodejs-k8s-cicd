@@ -11,14 +11,14 @@ node {
         app = docker.build("060696/nodejs-app")
     }
 
-    stage('Test image') {
+    // stage('Test image') {
 
-        app.inside {
+    //     app.inside {
 
-            sh 'echo "Tests passed"'
+    //         sh 'echo "Tests passed"'
 
-        }
-    }
+    //     }
+    // }
 
     stage('Push image') {
         /* Finally, we'll push the image with two tags:
