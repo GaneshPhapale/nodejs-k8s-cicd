@@ -5,7 +5,7 @@ A simple httpd web application.
 ## Download and Installation
 
 - Clone the repo ```https://github.com/GaneshPhapale/nodejs-k8s-cicd.git```
-- [Fork, Clone or Download on Github](https://github.com/GaneshPhapale/nodejs-k8s-cicd.git)
+- [Fork, Clone or Download on Github](https://github.com/GaneshPhapale/webapp-k8s-cicd.git)
 
 ## Usage
 
