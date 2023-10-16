@@ -1,6 +1,6 @@
 # webapp-k8s-app
 
-A simple person search node js web application.
+A simple httpd web application.
 
 ## Download and Installation
 
