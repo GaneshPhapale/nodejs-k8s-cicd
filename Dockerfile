@@ -1,8 +1,2 @@
-FROM node:18-slim
-WORKDIR /app
-COPY index.js package.json ./
-COPY views ./views
-RUN npm install
-EXPOSE 80
-ENTRYPOINT ["npm"]
-CMD ["run", "start"]
+FROM httpd:2.4
+COPY index.html /usr/local/apache2/htdocs/
