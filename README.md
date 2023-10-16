@@ -1,4 +1,4 @@
-# nodejs-k8s-app
+# webapp-k8s-app
 
 A simple person search node js web application.
 
@@ -9,9 +9,10 @@ A simple person search node js web application.
 
 ## Usage
 
-- After clone, run ```npm install``` to  download all the required dependencies.
-- Run ```npm start``` to run the web application.
+- After clone, run ```docker build -t <tag_name> .``` to  create docker image.
+- Run ```docker run -d -p8080:80 <tag_name>``` to run the web application.
+- Run ```http://localhost:8080``` in browser to access the web application
 
 ## Preview
 
-To view a application, click [here](http://localhost)
+To view a application, click [here](http://localhost:8080)
